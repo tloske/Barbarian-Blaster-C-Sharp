@@ -7,5 +7,20 @@ public partial class Projectile : Area3D
 
 	[Export] public float Speed { get; set; } = 30.0f;
 
+	public override void _PhysicsProcess(double delta)
+	{
+		base._PhysicsProcess(delta);
+		Position += Direction * Speed * (float)delta;
+	}
 
+	public void OnVisibleOnScreenNotifierScreenExited() => QueueFree();
+
+	public void OnAreaEntered(Area3D area)
+	{
+		if (area.IsInGroup("enemy"))
+		{
+			(area.Owner as Enemy).CurrentHealth--;
+			QueueFree();
+		}
+	}
 }

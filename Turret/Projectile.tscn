@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://2ahmvotu3b5q"]
+[gd_scene load_steps=5 format=3 uid="uid://2ahmvotu3b5q"]
+
+[ext_resource type="Script" path="res://Turret/Projectile.cs" id="1_7kqtx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aapcl"]
 albedo_color = Color(0.85098, 0, 0, 1)
@@ -11,9 +13,16 @@ material = SubResource("StandardMaterial3D_aapcl")
 
 [node name="Projectile" type="Area3D"]
 top_level = true
+script = ExtResource("1_7kqtx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_i1yfo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_30loi")
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
+aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="." method="OnVisibleOnScreenNotifierScreenExited"]
