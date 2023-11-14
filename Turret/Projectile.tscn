@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://2ahmvotu3b5q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aapcl"]
+albedo_color = Color(0.85098, 0, 0, 1)
+metallic = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_i1yfo"]
+material = SubResource("StandardMaterial3D_aapcl")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_30loi"]
+
+[node name="Projectile" type="Area3D"]
+top_level = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_i1yfo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_30loi")
