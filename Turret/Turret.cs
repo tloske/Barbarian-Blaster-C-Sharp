@@ -9,26 +9,28 @@ public partial class Turret : Node3D
 	[Export] private float FireRate { get; set; } = 0.5f;
 	[Export] private Node3D ProjectileSpawnPosition { get; set; }
 	public Path3D EnemyPath { get; set; }
-	private Area3D Target { get; set; }
+	private Enemy Target { get; set; }
 	private List<Area3D> Enemies { get; set; } = new List<Area3D>();
+	[Export] private float TurretRange { get; set; } = 10.0f;
+	public AnimationPlayer AnimationPlayer { get; set; }
 
 	public override void _Ready()
 	{
 		base._Ready();
 		GetNode<Timer>("Timer").WaitTime = FireRate;
+		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
-		if (Target == null && Enemies.Count > 0)
-		{
-			Target = Enemies.FirstOrDefault();
-		}
+
+		Target = GetNewTarget();
+
 		if (Target != null)
 		{
-			LookAt(Target.GlobalPosition, Vector3.Up);
-            Vector3 rotation = Rotation;
+			LookAt(Target.GlobalPosition, Vector3.Up, true);
+			Vector3 rotation = Rotation;
 			rotation.X = 0;
 			rotation.Z = 0;
 			Rotation = rotation;
@@ -37,26 +39,30 @@ public partial class Turret : Node3D
 
 	public void Fire()
 	{
-		if (Target == null) return;
-		Projectile projectile = ProjectileScene.Instantiate<Projectile>();
-		projectile.Direction = -GlobalTransform.Basis.Z;
-		AddChild(projectile);
-		projectile.GlobalPosition = ProjectileSpawnPosition.GlobalPosition;
+		if (Target != null)
+		{
+			if (AnimationPlayer.IsPlaying()) { AnimationPlayer.Stop(); }
+			AnimationPlayer.Play("Fire");
+			Projectile projectile = ProjectileScene.Instantiate<Projectile>();
+			projectile.Direction = GlobalTransform.Basis.Z;
+			AddChild(projectile);
+			projectile.GlobalPosition = ProjectileSpawnPosition.GlobalPosition;
+		}
 	}
 
-	public void OnAreaEntered(Area3D area)
+	public Enemy GetNewTarget()
 	{
-		if (area.IsInGroup("enemy"))
+		Enemy bestTarget = null;
+		foreach (Enemy enemy in GetTree().GetNodesInGroup("enemy"))
 		{
-			Enemies.Add(area);
+			if (Position.DistanceTo(enemy.Position) < TurretRange)
+			{
+				if (bestTarget == null || enemy.Progress > bestTarget.Progress)
+				{
+					bestTarget = enemy;
+				}
+			}
 		}
-	}
-	public void OnAreaExited(Area3D area)
-	{
-		if (area.IsInGroup("enemy"))
-		{
-			if (Target == area) { Target = null; }
-			Enemies.Remove(area);
-		}
+		return bestTarget;
 	}
 }

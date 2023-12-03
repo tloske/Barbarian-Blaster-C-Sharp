@@ -9,8 +9,8 @@ public partial class TurretManager : Node
     public void BuildTurret(Vector3 position)
     {
         Turret newTurret = TurretScene.Instantiate<Turret>();
-        newTurret.GlobalPosition = position;
         newTurret.EnemyPath = EnemyPath;
         AddChild(newTurret);
+        newTurret.GlobalPosition = position;
     }
 }

@@ -17,7 +17,7 @@ public partial class Projectile : Area3D
 
 	public void OnAreaEntered(Area3D area)
 	{
-		if (area.IsInGroup("enemy"))
+		if (area.IsInGroup("enemy_area"))
 		{
 			(area.Owner as Enemy).CurrentHealth--;
 			QueueFree();
