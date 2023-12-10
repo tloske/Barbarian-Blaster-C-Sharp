@@ -6,6 +6,7 @@ public partial class Projectile : Area3D
 	public Vector3 Direction { get; set; } = Vector3.Forward;
 
 	[Export] public float Speed { get; set; } = 30.0f;
+	[Export] public int Damage { get; set; } = 25;
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -19,7 +20,7 @@ public partial class Projectile : Area3D
 	{
 		if (area.IsInGroup("enemy_area"))
 		{
-			(area.Owner as Enemy).CurrentHealth--;
+			(area.Owner as Enemy).CurrentHealth -= Damage;
 			QueueFree();
 		}
 	}

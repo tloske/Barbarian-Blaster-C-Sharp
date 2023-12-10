@@ -6,9 +6,9 @@ public partial class Base : Node3D
 	[Export] public int MaxHealth { get; set; } = 5;
 
 	private int _currentHealth;
-	private int CurrentHealth
+	public int CurrentHealth
 	{
-		get { return _currentHealth; }
+		get => _currentHealth;
 		set
 		{
 			_currentHealth = value;
@@ -33,8 +33,5 @@ public partial class Base : Node3D
 		CurrentHealth = MaxHealth;
 	}
 
-	public void TakeDamage()
-	{
-		CurrentHealth--;
-	}
+	public void TakeDamage() => CurrentHealth--;
 }

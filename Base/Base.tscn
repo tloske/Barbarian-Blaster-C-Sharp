@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://du63yid424on5"]
+[gd_scene load_steps=7 format=3 uid="uid://du63yid424on5"]
 
 [ext_resource type="Script" path="res://Base/Base.cs" id="1_5wssh"]
+[ext_resource type="PackedScene" uid="uid://bv1sij733s3hn" path="res://Assets/Base.glb" id="2_t86xh"]
 [ext_resource type="Texture2D" uid="uid://dagpuw1qjgjym" path="res://white_rect.png" id="2_y126q"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0a3ip"]
-albedo_color = Color(0.886275, 0, 0.0196078, 1)
+[ext_resource type="Theme" uid="uid://b2sstmh8ngvsf" path="res://game_theme.tres" id="3_vwupw"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_f16me"]
 viewport_path = NodePath("Sprite3D/SubViewport")
@@ -17,16 +16,11 @@ outline_color = Color(0, 0, 0, 1)
 [node name="Base" type="Node3D" groups=["base"]]
 script = ExtResource("1_5wssh")
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-radius = 2.0
-height = 4.0
-sides = 32
-material = SubResource("StandardMaterial3D_0a3ip")
+[node name="Base" parent="." instance=ExtResource("2_t86xh")]
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 process_mode = 4
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.29585, 0)
 billboard = 1
 texture = SubResource("ViewportTexture_f16me")
 
@@ -34,6 +28,7 @@ texture = SubResource("ViewportTexture_f16me")
 process_mode = 4
 disable_3d = true
 transparent_bg = true
+scaling_3d_mode = 2
 gui_disable_input = true
 
 [node name="HealthBar" type="TextureProgressBar" parent="Sprite3D/SubViewport"]
@@ -45,6 +40,7 @@ offset_top = 18.0
 offset_bottom = 118.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_vwupw")
 value = 100.0
 nine_patch_stretch = true
 texture_progress = ExtResource("2_y126q")

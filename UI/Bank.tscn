@@ -26,3 +26,4 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "Gold: 9999"
 label_settings = SubResource("LabelSettings_es8e8")
+uppercase = true

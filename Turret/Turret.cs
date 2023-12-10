@@ -13,12 +13,14 @@ public partial class Turret : Node3D
 	private List<Area3D> Enemies { get; set; } = new List<Area3D>();
 	[Export] private float TurretRange { get; set; } = 10.0f;
 	public AnimationPlayer AnimationPlayer { get; set; }
+	public Node3D TurretBase { get; set; }
 
 	public override void _Ready()
 	{
 		base._Ready();
 		GetNode<Timer>("Timer").WaitTime = FireRate;
 		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		TurretBase = GetNode<Node3D>("TurretBase");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -29,7 +31,7 @@ public partial class Turret : Node3D
 
 		if (Target != null)
 		{
-			LookAt(Target.GlobalPosition, Vector3.Up, true);
+			TurretBase.LookAt(Target.GlobalPosition, Vector3.Up, true);
 			Vector3 rotation = Rotation;
 			rotation.X = 0;
 			rotation.Z = 0;
@@ -42,11 +44,11 @@ public partial class Turret : Node3D
 		if (Target != null)
 		{
 			if (AnimationPlayer.IsPlaying()) { AnimationPlayer.Stop(); }
-			AnimationPlayer.Play("Fire");
 			Projectile projectile = ProjectileScene.Instantiate<Projectile>();
-			projectile.Direction = GlobalTransform.Basis.Z;
 			AddChild(projectile);
 			projectile.GlobalPosition = ProjectileSpawnPosition.GlobalPosition;
+			projectile.Direction = TurretBase.GlobalTransform.Basis.Z;
+			AnimationPlayer.Play("Fire");
 		}
 	}
 
